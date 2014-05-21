@@ -23,3 +23,5 @@ markdown:         redcarpet
 redcarpet:
   extensions:
     - smart
+    - autolink
+    - tables
