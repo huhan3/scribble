@@ -41,8 +41,8 @@ INIT UNIT(D615) VOLID(D3D615) VTOC(1,0,270) -
 The VFY statement is a verify to check the old label on the volume, this makes it less likely to initialise the wrong volume. You need the volume off-line to all systems before initialising it. Note that the ICKDSF statement does not make the disk a 3390. This happens when the disks are logically configured in the hardware.
 
 
-
 **Allocating a VVDS**
+
 The system will allocate a VVDS for you the first time a VSAM file is allocated on a disk, but the default system VVDS is usually too small. You can allocate a VVDS yourself using IDCAMS commands
 
 ```
