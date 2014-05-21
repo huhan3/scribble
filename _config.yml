@@ -1,6 +1,6 @@
 title:            Scribble
 description:      A jekyll theme. Because I scribble.
-url:              http://scribble.muan.co/
+url:              http://mainframe.echoff.com
 signoff:          Mu-An
 disqus_shortname: muan
 facebook_appid:   604714799556697
@@ -9,13 +9,13 @@ links:
   - name:         About
     url:          /about
   - name:         Blog
-    url:          http://muan.co
+    url:          http://mainframe.echoff.com
     external:     true
   - name:         Email
-    url:          mailto:hello@muan.co
+    url:          mailto:huhan3@gmail.com
     external:     true
   - name:         GitHub
-    url:          http://github.com/muan
+    url:          http://github.com/huhan3
     external:     true
 pygments:         true
 permalink:        pretty
