@@ -21,8 +21,39 @@ Modern disks use FBA storage, but they have to emulate 3390 CKD format, so the t
 | Cylinders per Volume | 1,113 | 2,226 | 3,339 | 10,017 | 32,760 | 65,520 |
 | Bytes per Volume | 946 MB | 1.89 GB | 2.84 GB | 8.51 GB | 27.84 GB | 55.68 GB |
 
-IBM raised the bar on volume sizes with z/OS V1R10. Extended Address Volumes (EAV) can hold between 65521 and 262668 cylinders. The cylinder addressing now becomes CCCCcccH where CCCCH is the old addressing system with an extra three ccc cylinder addresses added. Datasets are defined as EAS-eligible, which means that they can be allocated into the cylinder space above the 65521 mark. This is defined as 'cylinder managed space' while the area up to the 65521 mark is 'track managed space'. By my calculations, that means an EAV volume can hold just over 223 GB. 
+IBM raised the bar on volume sizes with z/OS V1R10. Extended Address Volumes (EAV) can hold between 65521 and 262668 cylinders. The cylinder addressing now becomes CCCCcccH where CCCCH is the old addressing system with an extra three ccc cylinder addresses added. Datasets are defined as EAS-eligible, which means that they can be allocated into the cylinder space above the 65521 mark. This is defined as 'cylinder managed space' while the area up to the 65521 mark is 'track managed space'. By my calculations, that means an EAV volume can hold just over 223 GB.
 
 Cylinder managed EAV-elligible datasets need extra VTOC information, so two new DSCBs are also introduced, the F8 DSCB and the F9 DSCB. The F8 DSCB is the EAV equivalent of an F1 DSCB, while the F9DSCB can contain pointers to F3 DSCBs
 
 While a 3390-3 disk can store 2.84 GB, you will not get that amount of data on it. Each disk has to contain a Volume Table of Contents (VTOC), a VTOC index, and a VSAM VOLUME DATASET (VVDS). Typically, these require 270 tracks, 14 tracks and 30 tracks respectively. The disk also has a single track self describing label. That lot uses up 315 tracks, or about 18 MB. Then, data is stored on each track in blocks, with inter block gaps in between. Best case for efficient space use is generally half track blocking, which is 27,998 bytes per block, or 55,996 usable bytes per track. The sum is (50,085-315)*55,996 = 2.787 GB. So that means you can store about 2.79 GB of user data on a 3390-3 disk.
+
+----
+
+**Initialising disks**
+
+You define a VTOC and Index when you initialise a volume with ICKDSF. A typical command would look like
+
+```
+INIT UNIT(D615) VOLID(D3D615) VTOC(1,0,270) -
+ INDEX(0,1,14) VFY(OLDVOL)
+```
+
+The VFY statement is a verify to check the old label on the volume, this makes it less likely to initialise the wrong volume. You need the volume off-line to all systems before initialising it. Note that the ICKDSF statement does not make the disk a 3390. This happens when the disks are logically configured in the hardware.
+
+
+
+**Allocating a VVDS**
+The system will allocate a VVDS for you the first time a VSAM file is allocated on a disk, but the default system VVDS is usually too small. You can allocate a VVDS yourself using IDCAMS commands
+
+```
+   DEFINE CLUSTER -
+     (NAME(SYS1.VVDS.Vvolser) -
+      VOLUMES(volser) -
+      NONINDEXED -
+      TRACKS(60 15)) -
+      CATALOG(CATALOG.master.name)
+```
+
+
+You need to substitute your own volser, and catalog name
+
