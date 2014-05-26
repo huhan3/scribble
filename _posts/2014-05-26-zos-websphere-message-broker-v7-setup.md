@@ -17,25 +17,25 @@ The information in this data set applies to:
 ### 1. USS (OMVS) customization in USER.PARMLIB(BPXPRM01).
 Set the UNIX System Services parameters as below:<br />
 
-  A. MAXCORESIZE(2147483647)
-  B. MAXCPUTIME(2147483647)
+  A. MAXCORESIZE(2147483647)<br />
+  B. MAXCPUTIME(2147483647)<br />
   C. MAXASSIZE >1073741824. A minimum value of 393216000 bytes
-     is required.
-  D. MAXTHREADS and MAXTHREADTASKS.
+     is required.<br />
+  D. MAXTHREADS and MAXTHREADTASKS.<br />
      The value of MAXTHREADS and MAXTHREADTASKS depends on your
-     application.
-     To calculate the value needed for each message flow:
+     application.<br />
+     To calculate the value needed for each message flow:<br />
      Multiply the number of input nodes by the number of instances
-     (additional threads +1).
-     Sum the values of all message flows, then add 10 to the sum.
-     Add to the sum the number of threads used for each HTTP listener.
-  E. IPCSEMNIDS
+     (additional threads +1).<br />
+     Sum the values of all message flows, then add 10 to the sum.<br />
+     Add to the sum the number of threads used for each HTTP listener.<br />
+  E. IPCSEMNIDS<br />
      You must set IPCSEMNIDS to a value four times the number of
-     potential execution group address spaces on a system.
-  F. IPCSHMNIDS
+     potential execution group address spaces on a system.<br />
+  F. IPCSHMNIDS<br />
      You must set IPCSEMNIDS to a value that exceeds the number of
      potential execution group address spaces on a system.
-  G. IPCSHMNSEGS
+  G. IPCSHMNSEGS<br />
      You must set IPCSHMNSEGS to a value that exceeds the potential
      number of execution groups for each broker.
 
@@ -52,6 +52,7 @@ If you plan to deploy to more than one execution group on z/OS, the
 amount of storage required by the execution group address spaces can be
 reduced by setting the shared-library extended attribute on the
 following files:
+
 ```
      /usr/lpp/mqsi/bin/*
      /usr/lpp/mqsi/lil/*
@@ -59,22 +60,24 @@ following files:
      /usr/lpp/mqsi/lib/wbirf/*
      /usr/lpp/mqsi/lib/wbimb/*
 ```
-To set the shared-library attribute, use the extattr command with
-+1 option.
-To find out if the shared-library extended attribute has been set,
-use the ls -E command.
+
+To set the shared-library attribute, use the extattr command with +1 option.<br />
+To find out if the shared-library extended attribute has been set, use the ls -E command.<br />
 
 ### 5. MQ Planning.
 
-  A. Your queue manager must have a dead-letter queue.
-     Check the dead-letter queue: /+M71A DIS QMGR DEADQ;
-     Check the queue exist:  /+M71A DIS QL(M71A.DEAD.QUEUE) STGCLASS
-     Check the STGCLASS: /+M71A DIS STGCLASS(DEFAULT)
-  B. Mount MQ JMS feature on /usr/lpp/mqm/V7R0M0.
+  A. Your queue manager must have a dead-letter queue.<br />
+     Check the dead-letter queue: /+M71A DIS QMGR DEADQ; <br />
+     Check the queue exist:  /+M71A DIS QL(M71A.DEAD.QUEUE) STGCLASS <br />
+     Check the STGCLASS: /+M71A DIS STGCLASS(DEFAULT) <br />
+  B. Mount MQ JMS feature on /usr/lpp/mqm/V7R0M0. <br />
      In USER.PARMLIB(BPXPRM01),
+
+```
      MOUNT FILESYSTEM('CSQ.V7R0M1.SCSQHFS')
            TYPE(HFS) MODE(READ)
            MOUNTPOINT('/usr/lpp/mqm/V7R0M0')
+```
 
 ### 6. (Option) RRS
 
